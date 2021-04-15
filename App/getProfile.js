@@ -16,6 +16,7 @@ function scrapingProfile() {
     const cssSelectorsProfile = {
         profile: {
             name: 'div.ph5 > div.mt2 > div > ul > li',
+            typeContact: 'div.ph5 > div.mt2 > div > ul > li.pv-top-card__distance-badge span.visually-hidden',
             resumen: 'div.ph5 > div.mt2 > div > ul ~ h2',
             // country: 'div.ph5.pb5 > div.display-flex.mt2.pv-top-card--reflow > div.pv-top-card__list-container > ul.cx.mt1 > li'
             country: 'div.ph5 > div.mt2 > div > ul.mt1 > li.t-16',
@@ -66,6 +67,7 @@ function scrapingProfile() {
         const {
             profile: {
                 name: nameCss,
+                typeContact: typeContactCss,
                 resumen: resumenCss,
                 country: countryCss,
                 email: emailCss,
@@ -79,6 +81,7 @@ function scrapingProfile() {
         } = cssSelectorsProfile
 
         const name = document.querySelector(nameCss)?.innerText
+        const typeContact = document.querySelector(typeContactCss)?.innerText
         const resumen = document.querySelector(resumenCss)?.innerText
         const country = document.querySelector(countryCss)?.innerText
 
@@ -98,7 +101,7 @@ function scrapingProfile() {
         const buttonCloseSeeMore = document.querySelector(buttonCloseSeeMoreCss)
         buttonCloseSeeMore.click()
 
-        return { name, resumen, country, email, phone, urlLinkedin }
+        return { name, typeContact, resumen, country, email, phone, urlLinkedin }
     }
 
     const getProfile = async () => {
@@ -107,9 +110,29 @@ function scrapingProfile() {
 
         console.log(profile)
         const node = document.createElement('p')
+        const headings = document.createElement('h3')
+        headings.append(document.querySelector(cssSelectorsProfile.profile.name)?.innerText + ' - '+ document.querySelector(cssSelectorsProfile.profile.typeContact)?.innerText)
         node.append(JSON.stringify(profile))
-        document.querySelector('main').prepend(node)
+        document.getElementById('global-nav').prepend(node)
+        document.getElementById('global-nav').prepend(headings)
     }
 
-    getProfile()
+
+    const getTypeProfile = document.querySelector('div.ph5 > div.mt2 > div > ul > li.pv-top-card__distance-badge span.dist-value').innerText.charAt()
+    
+    switch (getTypeProfile) {
+        case '1':
+            console.log('Obtener datos de 1ra persona')
+            getProfile()
+            break;
+    
+        case '2':
+            console.log('Obtener datos de 2da persona')
+            getProfile()
+            break;
+        case '3':
+            console.log('Obtener datos de 3ra persona')
+            getProfile()
+            break;
+    }
 }
