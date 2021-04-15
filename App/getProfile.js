@@ -101,7 +101,7 @@ function scrapingProfile() {
         const buttonCloseSeeMore = document.querySelector(buttonCloseSeeMoreCss)
         buttonCloseSeeMore.click()
 
-        return { name, typeContact, resumen, country, email, phone, urlLinkedin }
+        return { resumen, country, email, phone, urlLinkedin }
     }
 
     const getProfile = async () => {
