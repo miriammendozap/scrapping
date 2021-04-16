@@ -30,6 +30,18 @@ function scrapingProfile() {
         }
     }
 
+    const cssSelectorsExperience = {
+        experience: {
+            job: 'section#experience-section section.pv-profile-section a.ember-view h3',
+            company: 'section#experience-section section.pv-profile-section a.ember-view p.pv-entity__secondary-title',
+            date: 'section#experience-section section.pv-profile-section a.ember-view h4.pv-entity__date-range > span:nth-child(2)',
+            time: 'section#experience-section section.pv-profile-section a.ember-view h4.pv-entity__date-range ~ h4 > span:nth-child(2)',
+            descriptionExtra: 'section#experience-section section.pv-position-entity div.pv-entity__extra-details > p',
+            // extraLinks: 'section#experience-section section.pv-position-entity div.pv-entity__extra-details > div a',
+            // company: 'section#experience-section > ul.section-info > li > div.pv-entity__extra-details ',
+        }
+    }
+
     const wait = (milliseconds) => {
         return new Promise(function(resolve){
             setTimeout(function(){
@@ -103,20 +115,58 @@ function scrapingProfile() {
 
         return { resumen, country, email, phone, urlLinkedin }
     }
+    const getInfoExperience = async () => {
+        const {
+            experience: {
+                job: jobCss,
+                company: companyCss,
+                date: dateCss,
+                time: timeCss,
+                descriptionExtra: descriptionExtraCss
+            }
+        } = cssSelectorsExperience
+
+        const job = document.querySelector(jobCss)?.innerText
+        const company = document.querySelector(companyCss)?.innerText
+        const date = document.querySelector(dateCss)?.innerText
+        const time = document.querySelector(timeCss)?.innerText
+        const descriptionExtra = document.querySelector(descriptionExtraCss)?.innerText
+
+        await wait(1000)
+
+
+        return { job, company, date, time, descriptionExtra }
+    }
 
     const getProfile = async () => {
         const profile = await getContactProfile()
+        const experience = await getInfoExperience()
         await autoscrollToElement('body')
 
         console.log(profile)
+        console.log(experience)
         const node = document.createElement('p')
         const headings = document.createElement('h3')
+        const headings_4 = document.createElement('h4')
+        const container = document.createElement('div')
+        const container2 = document.createElement('div')
+
         headings.append(document.querySelector(cssSelectorsProfile.profile.name)?.innerText + ' - '+ document.querySelector(cssSelectorsProfile.profile.typeContact)?.innerText)
         node.append(JSON.stringify(profile))
-        document.getElementById('global-nav').prepend(node)
-        document.getElementById('global-nav').prepend(headings)
+        // Profile
+        container.append(headings)
+        container.append(node)
+        // Experience
+        headings_4.append('Experiencia')
+        container2.append(headings_4)
+        container2.append(JSON.stringify(experience))
+
+        document.getElementById('global-nav').prepend(container2)
+        document.getElementById('global-nav').prepend(container)
     }
 
+
+    
 
     const getTypeProfile = document.querySelector('div.ph5 > div.mt2 > div > ul > li.pv-top-card__distance-badge span.dist-value').innerText.charAt()
     
