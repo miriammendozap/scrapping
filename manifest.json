@@ -1,10 +1,25 @@
 {
-    "name": "Scrap MiriamMendoza",
-    "description": "Get Profile Information",
-    "version": "1.0",
+    "name": "Scrapping Profiles MP",
+    "version": "1.1",
+    "description": "Extract Profile",
     "manifest_version": 3,
+    "content_scripts": [
+      {
+        "matches": ["https://www.linkedin.com/*"],
+        "js": ["./app.js"]
+      }
+    ],
     "action": {
-        "default_popup": "./App/index.html"
+        "default_popup": "./App/index.html",
+        "default_icon": {
+          "32": "./App/image/32.png",
+          "48": "./App/image/48.png"
+        }
     },
-    "permissions": [ "activeTab",  "scripting"]
-}
+    "permissions": ["activeTab", "scripting"],
+    "icons": {
+      "32": "./App/image/32.png",
+      "48": "./App/image/48.png"
+    }
+  }
+  
